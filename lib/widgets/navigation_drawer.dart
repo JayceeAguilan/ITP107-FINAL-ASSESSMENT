@@ -112,7 +112,7 @@ class NavigationDrawerWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              '© 2024 UrbanKicks',
+              '© 2025 UrbanKicks',
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.grey[600],
