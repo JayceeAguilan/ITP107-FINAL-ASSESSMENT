@@ -129,30 +129,57 @@ class AboutScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 40),
-                  Wrap(
-                    spacing: 40,
-                    runSpacing: 40,
-                    alignment: WrapAlignment.center,
+                  Column(
                     children: [
-                      _buildTeamMember(
-                        'John Christopher A. Aguilan',
-                        'Founder & CEO',
-                        'assets/images/profile.jpg',
+                      Wrap(
+                        spacing: 100,
+                        runSpacing: 100,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          _buildTeamMember(
+                            'John Christopher A. Aguilan',
+                            'Founder & CEO',
+                            'assets/images/profile.jpg',
+                          ),
+                          _buildTeamMember(
+                            'Joyce Ann Fernandez',
+                            'Head of Design',
+                            'assets/images/joyce.jpg',
+                          ),
+                          _buildTeamMember(
+                            'King Humphrey Amandy',
+                            'Product Manager',
+                            'assets/images/king.jpg',
+                          ),
+                        ],
                       ),
-                      _buildTeamMember(
-                        'Joyce Ann Fernandez',
-                        'Head of Design',
-                        'assets/images/joyce.jpg',
-                      ),
-                      _buildTeamMember(
-                        'King Humphrey Amandy',
-                        'Product Manager',
-                        'assets/images/king.jpg',
-                      ),
-                      _buildTeamMember(
-                        'Frenz Dave Dacillo',
-                        'Product Manager',
-                        'assets/images/frenz.jpg',
+                      const SizedBox(height: 40),
+                      Wrap(
+                        spacing: 100,
+                        runSpacing: 100,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          _buildTeamMember(
+                            'Kurt Larren Rosales',
+                            'UI/UX Designer',
+                            'assets/images/kurt.jpg',
+                          ),
+                           _buildTeamMember(
+                            'Alyssa Grace Brillante',
+                            'UI/UX Designer',
+                            'assets/images/aly.jpg',
+                          ),
+                           _buildTeamMember(
+                            'Haidee Claire Fajardo',
+                            'System Architect',
+                            'assets/images/haidee.jpg',
+                          ),
+                           _buildTeamMember(
+                            'Mary Mae Frisco',
+                            'Project Manager',
+                            'assets/images/mary.jpg',
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -201,23 +228,36 @@ class AboutScreen extends StatelessWidget {
   Widget _buildTeamMember(String name, String role, String imageUrl) {
     return Column(
       children: [
-        ClipOval(
-          child: Image.asset(
-            imageUrl,
-            width: 120,
-            height: 120,
-            fit: BoxFit.cover,
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.asset(
+              imageUrl,
+              width: 200,
+              height: 260,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         Text(
           name,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: 8),
         Text(
           role,
-          style: TextStyle(color: Colors.grey[600]),
+          style: TextStyle(color: Colors.grey[600], fontSize: 16),
         ),
       ],
     );

@@ -75,9 +75,13 @@ flutter:
 
   assets:
     - assets/images/profile.jpg
-    - assets/images/frenz.jpg
+    - assets/images/aly.jpg
     - assets/images/king.jpg
     - assets/images/joyce.jpg
+    - assets/images/kurt.jpg
+    - assets/images/haidee.jpg
+    - assets/images/mary.jpg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
