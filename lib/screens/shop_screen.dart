@@ -4,11 +4,32 @@ import '../providers/product_provider.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/footer.dart';
 import '../widgets/product_card.dart';
+import '../widgets/skeleton_loader.dart';
 import '../widgets/filter_drawer.dart';
 import '../utils/constants.dart';
 
-class ShopScreen extends StatelessWidget {
+class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
+
+  @override
+  State<ShopScreen> createState() => _ShopScreenState();
+}
+
+class _ShopScreenState extends State<ShopScreen> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Simulate loading delay
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +115,38 @@ class ShopScreen extends StatelessWidget {
           Expanded(
             child: Consumer<ProductProvider>(
               builder: (context, provider, child) {
+                if (_isLoading) {
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Center(
+                            child: ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: AppConstants.maxContentWidth),
+                              child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: isDesktop ? 4 : (isLargeScreen ? 3 : 1),
+                                  childAspectRatio: 0.7,
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16,
+                                ),
+                                itemCount: 8,
+                                itemBuilder: (context, index) {
+                                  return const SkeletonProductCard();
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Footer(),
+                      ],
+                    ),
+                  );
+                }
+
                 final products = provider.products;
 
                 if (products.isEmpty) {

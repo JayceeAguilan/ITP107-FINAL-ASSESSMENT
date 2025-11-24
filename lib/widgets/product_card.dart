@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../models/product.dart';
 import '../providers/cart_provider.dart';
 import '../theme/app_theme.dart';
+import '../services/toast_service.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
@@ -41,14 +42,17 @@ class _ProductCardState extends State<ProductCard> {
                     AnimatedScale(
                       scale: _isHovered ? 1.05 : 1.0,
                       duration: const Duration(milliseconds: 300),
-                      child: CachedNetworkImage(
-                        imageUrl: widget.product.mainImage,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: Colors.grey[200],
-                          child: const Center(child: CircularProgressIndicator()),
+                      child: Hero(
+                        tag: widget.product.id,
+                        child: CachedNetworkImage(
+                          imageUrl: widget.product.mainImage,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Container(
+                            color: Colors.grey[200],
+                            child: const Center(child: CircularProgressIndicator()),
+                          ),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
                         ),
-                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
                     ),
                     if (widget.product.isNew)
@@ -147,16 +151,7 @@ class _ProductCardState extends State<ProductCard> {
                                 widget.product.colors.first, 
                                 1
                               );
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Added ${widget.product.name} to cart'),
-                                  duration: const Duration(seconds: 2),
-                                  action: SnackBarAction(
-                                    label: 'VIEW CART',
-                                    onPressed: () => context.go('/cart'),
-                                  ),
-                                ),
-                              );
+                              ToastService.showSuccess('Added ${widget.product.name} to cart');
                             },
                           ),
                         ),

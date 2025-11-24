@@ -6,6 +6,8 @@ import '../widgets/custom_app_bar.dart';
 import '../widgets/footer.dart';
 import '../theme/app_theme.dart';
 import '../utils/constants.dart';
+import '../widgets/receipt_dialog.dart';
+import '../services/toast_service.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -162,6 +164,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             onChanged: (value) => setState(() => _paymentMethod = value!),
             contentPadding: EdgeInsets.zero,
           ),
+          RadioListTile<String>(
+            title: const Text('Gcash Payment'),
+            value: 'gcash',
+            groupValue: _paymentMethod,
+            onChanged: (value) => setState(() => _paymentMethod = value!),
+            contentPadding: EdgeInsets.zero,
+          ),
           
           const SizedBox(height: 24),
           
@@ -186,6 +195,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
               ],
+            ),
+          ],
+          if (_paymentMethod == 'gcash') ...[
+            TextFormField(
+              decoration: const InputDecoration(labelText: 'Gcash Number', border: OutlineInputBorder()),
+              keyboardType: TextInputType.phone,
+              validator: (value) {
+                if (_paymentMethod == 'gcash' && (value == null || value.isEmpty)) {
+                  return 'Required';
+                }
+                return null;
+              },
             ),
           ],
         ],
@@ -284,33 +305,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   void _handlePlaceOrder(BuildContext context, CartProvider cart) {
     if (_formKey.currentState!.validate()) {
-      // Show success dialog
+      // Show receipt dialog
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          title: const Column(
-            children: [
-              Icon(Icons.check_circle, color: Colors.green, size: 60),
-              SizedBox(height: 16),
-              Text('Order Placed Successfully!'),
-            ],
-          ),
-          content: const Text(
-            'Thank you for your purchase. Your order has been received and is being processed.',
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                cart.clear();
-                context.go('/');
-              },
-              child: const Text('Continue Shopping'),
-            ),
-          ],
+        builder: (context) => ReceiptDialog(
+          cart: cart,
+          paymentMethod: _paymentMethod,
+          onContinue: () {
+            cart.clear();
+            context.go('/');
+          },
         ),
       );
+    } else {
+      ToastService.showError('Please fill in all required fields.');
     }
   }
 }

@@ -11,6 +11,7 @@ import '../widgets/footer.dart';
 import '../widgets/product_card.dart';
 import '../theme/app_theme.dart';
 import '../utils/constants.dart';
+import '../services/toast_service.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final String productId;
@@ -133,10 +134,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Image.network(
-                    image,
-                    fit: BoxFit.contain,
-                  ),
+                  child: image == product.mainImage
+                      ? Hero(
+                          tag: product.id,
+                          child: Image.network(
+                            image,
+                            fit: BoxFit.contain,
+                          ),
+                        )
+                      : Image.network(
+                          image,
+                          fit: BoxFit.contain,
+                        ),
                 );
               },
             );
@@ -338,15 +347,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             _selectedColor!,
                             _quantity,
                           );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Added ${product.name} to cart'),
-                              action: SnackBarAction(
-                                label: 'VIEW CART',
-                                onPressed: () => context.go('/cart'),
-                              ),
-                            ),
-                          );
+                          ToastService.showSuccess('Added ${product.name} to cart');
                         }
                       : null,
                   style: ElevatedButton.styleFrom(

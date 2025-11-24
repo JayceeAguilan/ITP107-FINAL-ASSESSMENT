@@ -5,6 +5,7 @@ import '../providers/cart_provider.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/footer.dart';
 import '../widgets/cart_item_widget.dart';
+import '../widgets/empty_state_widget.dart';
 import '../theme/app_theme.dart';
 import '../utils/constants.dart';
 
@@ -75,28 +76,12 @@ class CartScreen extends StatelessWidget {
   }
 
   Widget _buildEmptyCart(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.shopping_cart_outlined, size: 100, color: Colors.grey[300]),
-          const SizedBox(height: 24),
-          Text(
-            'Your cart is empty',
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Looks like you haven\'t added any items to your cart yet.',
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(height: 32),
-          ElevatedButton(
-            onPressed: () => context.go('/shop'),
-            child: const Text('Start Shopping'),
-          ),
-        ],
-      ),
+    return EmptyStateWidget(
+      title: 'Your cart is empty',
+      description: 'Looks like you haven\'t added any items to your cart yet.',
+      icon: Icons.shopping_cart_outlined,
+      buttonText: 'Start Shopping',
+      onButtonPressed: () => context.go('/shop'),
     );
   }
 

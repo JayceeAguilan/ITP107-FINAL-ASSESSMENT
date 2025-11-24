@@ -7,11 +7,32 @@ import '../providers/product_provider.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/footer.dart';
 import '../widgets/product_card.dart';
+import '../widgets/skeleton_loader.dart';
 import '../theme/app_theme.dart';
 import '../utils/constants.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // Simulate loading delay
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +59,9 @@ class HomeScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 32),
-                  _buildCategoriesGrid(context, productProvider, isLargeScreen),
+                  _isLoading 
+                      ? _buildCategoriesSkeleton(isLargeScreen)
+                      : _buildCategoriesGrid(context, productProvider, isLargeScreen),
                 ],
               ),
             ),
@@ -53,37 +76,64 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Center(
-                          child: Text(
-                            'Featured Collections',
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.headlineMedium,
+                    child: isLargeScreen
+                        ? Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Center(
+                                child: Text(
+                                  'Featured Collections',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context).textTheme.headlineMedium,
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                child: TextButton(
+                                  onPressed: () {
+                                    productProvider.clearFilters();
+                                    context.go('/shop');
+                                  },
+                                  child: const Row(
+                                    children: [
+                                      Text('View All'),
+                                      SizedBox(width: 4),
+                                      Icon(Icons.arrow_forward, size: 16),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: [
+                              Text(
+                                'Featured Collections',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.headlineMedium,
+                              ),
+                              const SizedBox(height: 8),
+                              TextButton(
+                                onPressed: () {
+                                  productProvider.clearFilters();
+                                  context.go('/shop');
+                                },
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('View All'),
+                                    SizedBox(width: 4),
+                                    Icon(Icons.arrow_forward, size: 16),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                        Positioned(
-                          right: 0,
-                          child: TextButton(
-                            onPressed: () {
-                              productProvider.clearFilters();
-                              context.go('/shop');
-                            },
-                            child: const Row(
-                              children: [
-                                Text('View All'),
-                                SizedBox(width: 4),
-                                Icon(Icons.arrow_forward, size: 16),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                   const SizedBox(height: 32),
-                  _buildFeaturedProducts(context, productProvider, isLargeScreen),
+                  _isLoading
+                      ? _buildFeaturedSkeleton(isLargeScreen)
+                      : _buildFeaturedProducts(context, productProvider, isLargeScreen),
                 ],
               ),
             ),
@@ -105,7 +155,9 @@ class HomeScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 32),
-                  _buildNewArrivalsGrid(context, productProvider, isLargeScreen),
+                  _isLoading
+                      ? _buildNewArrivalsSkeleton(isLargeScreen)
+                      : _buildNewArrivalsGrid(context, productProvider, isLargeScreen),
                   const SizedBox(height: 40),
                   OutlinedButton(
                     onPressed: () {
@@ -224,6 +276,46 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildCategoriesSkeleton(bool isLargeScreen) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 1200),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: isLargeScreen ? 5 : 2,
+          childAspectRatio: isLargeScreen ? 0.8 : 1.0,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                SkeletonBase(width: 64, height: 64, borderRadius: 32),
+                SizedBox(height: 16),
+                SkeletonBase(width: 80, height: 16),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildCategoriesGrid(BuildContext context, ProductProvider provider, bool isLargeScreen) {
     final categories = provider.categories;
     return ConstrainedBox(
@@ -286,6 +378,48 @@ class HomeScreen extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildFeaturedSkeleton(bool isLargeScreen) {
+    if (isLargeScreen) {
+      return Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: List.generate(3, (index) {
+                return const Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: SizedBox(
+                      height: 350,
+                      child: SkeletonProductCard(),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return CarouselSlider(
+      options: CarouselOptions(
+        height: 380,
+        viewportFraction: 0.75,
+        enlargeCenterPage: true,
+        enableInfiniteScroll: true,
+        autoPlay: true,
+      ),
+      items: List.generate(3, (index) {
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
+          child: SkeletonProductCard(),
+        );
+      }),
     );
   }
 
@@ -419,6 +553,26 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildNewArrivalsSkeleton(bool isLargeScreen) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 1200),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: isLargeScreen ? 4 : 2,
+          childAspectRatio: 0.7,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
+        itemCount: 4,
+        itemBuilder: (context, index) {
+          return const SkeletonProductCard();
+        },
       ),
     );
   }

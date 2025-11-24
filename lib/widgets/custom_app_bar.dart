@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:badges/badges.dart' as badges;
 import '../providers/cart_provider.dart';
+import '../widgets/animated_cart_icon.dart';
 import '../theme/app_theme.dart';
 import '../utils/constants.dart';
 
@@ -44,25 +45,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           },
         ),
         
-        Consumer<CartProvider>(
-          builder: (context, cart, child) {
-            return IconButton(
-              icon: badges.Badge(
-                position: badges.BadgePosition.topEnd(top: -10, end: -5),
-                showBadge: cart.itemCount > 0,
-                badgeContent: Text(
-                  cart.itemCount.toString(),
-                  style: const TextStyle(color: Colors.white, fontSize: 10),
-                ),
-                badgeStyle: const badges.BadgeStyle(
-                  badgeColor: AppTheme.accentColor,
-                ),
-                child: const Icon(Icons.shopping_cart_outlined),
-              ),
-              onPressed: () => context.go('/cart'),
-            );
-          },
-        ),
+        const AnimatedCartIcon(),
         
         const SizedBox(width: 16),
         

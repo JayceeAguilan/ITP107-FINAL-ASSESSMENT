@@ -43,7 +43,7 @@ class AboutScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Redefining Footwear Since 2023',
+                        'Redefining Footwear Since 2025',
                         style: GoogleFonts.inter(
                           color: Colors.white.withValues(alpha: 0.9),
                           fontSize: 18,
@@ -201,9 +201,13 @@ class AboutScreen extends StatelessWidget {
   Widget _buildTeamMember(String name, String role, String imageUrl) {
     return Column(
       children: [
-        CircleAvatar(
-          radius: 60,
-          backgroundImage: NetworkImage(imageUrl),
+        ClipOval(
+          child: Image.asset(
+            imageUrl,
+            width: 120,
+            height: 120,
+            fit: BoxFit.cover,
+          ),
         ),
         const SizedBox(height: 16),
         Text(

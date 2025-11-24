@@ -50,38 +50,87 @@ final GoRouter _router = GoRouter(
   routes: [
     GoRoute(
       path: '/welcome',
-      builder: (context, state) => const WelcomeScreen(),
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        context: context, 
+        state: state, 
+        child: const WelcomeScreen(),
+      ),
     ),
     GoRoute(
       path: '/',
-      builder: (context, state) => const HomeScreen(),
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        context: context, 
+        state: state, 
+        child: const HomeScreen(),
+      ),
     ),
     GoRoute(
       path: '/shop',
-      builder: (context, state) => const ShopScreen(),
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        context: context, 
+        state: state, 
+        child: const ShopScreen(),
+      ),
     ),
     GoRoute(
       path: '/product/:id',
-      builder: (context, state) {
+      pageBuilder: (context, state) {
         final id = state.pathParameters['id']!;
-        return ProductDetailScreen(productId: id);
+        return _buildPageWithTransition(
+          context: context, 
+          state: state, 
+          child: ProductDetailScreen(productId: id),
+        );
       },
     ),
     GoRoute(
       path: '/cart',
-      builder: (context, state) => const CartScreen(),
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        context: context, 
+        state: state, 
+        child: const CartScreen(),
+      ),
     ),
     GoRoute(
       path: '/checkout',
-      builder: (context, state) => const CheckoutScreen(),
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        context: context, 
+        state: state, 
+        child: const CheckoutScreen(),
+      ),
     ),
     GoRoute(
       path: '/about',
-      builder: (context, state) => const AboutScreen(),
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        context: context, 
+        state: state, 
+        child: const AboutScreen(),
+      ),
     ),
     GoRoute(
       path: '/contact',
-      builder: (context, state) => const ContactScreen(),
+      pageBuilder: (context, state) => _buildPageWithTransition(
+        context: context, 
+        state: state, 
+        child: const ContactScreen(),
+      ),
     ),
   ],
 );
+
+CustomTransitionPage _buildPageWithTransition({
+  required BuildContext context, 
+  required GoRouterState state, 
+  required Widget child,
+}) {
+  return CustomTransitionPage(
+    key: state.pageKey,
+    child: child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
+        child: child,
+      );
+    },
+  );
+}
