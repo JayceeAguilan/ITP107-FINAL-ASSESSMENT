@@ -6,6 +6,7 @@ import '../widgets/footer.dart';
 import '../widgets/product_card.dart';
 import '../widgets/skeleton_loader.dart';
 import '../widgets/filter_drawer.dart';
+import '../widgets/navigation_drawer.dart';
 import '../utils/constants.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -38,6 +39,7 @@ class _ShopScreenState extends State<ShopScreen> {
 
     return Scaffold(
       appBar: const CustomAppBar(),
+      drawer: const NavigationDrawerWidget(),
       endDrawer: const FilterDrawer(),
       body: Column(
         children: [

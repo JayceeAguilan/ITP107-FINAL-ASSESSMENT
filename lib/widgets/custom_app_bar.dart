@@ -13,8 +13,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final isLargeScreen = MediaQuery.of(context).size.width > AppConstants.mobileBreakpoint;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return AppBar(
+      automaticallyImplyLeading: !isLargeScreen,
+      titleSpacing: isLargeScreen ? null : 8,
       title: MouseRegion(
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
@@ -24,21 +27,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               color: AppTheme.primaryColor,
               fontWeight: FontWeight.w800,
+              fontSize: isLargeScreen ? null : (screenWidth < 400 ? 18 : 20),
             ),
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ),
       actions: [
-        if (isLargeScreen) ...[
+        if (isLargeScreen) ...[ 
           _NavItem(title: 'Home', onTap: () => context.go('/')),
           _NavItem(title: 'Shop', onTap: () => context.go('/shop')),
           _NavItem(title: 'About', onTap: () => context.go('/about')),
           _NavItem(title: 'Contact', onTap: () => context.go('/contact')),
-          const SizedBox(width: 16),
+          const SizedBox(width: 8),
         ],
         
         IconButton(
           icon: const Icon(Icons.search),
+          iconSize: isLargeScreen ? 24 : 20,
+          padding: EdgeInsets.all(isLargeScreen ? 8 : 4),
+          constraints: const BoxConstraints(),
           onPressed: () {
             context.go('/shop');
             // Ideally focus search field
@@ -47,17 +55,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         
         const AnimatedCartIcon(),
         
-        const SizedBox(width: 16),
-        
-        if (!isLargeScreen)
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            ),
-          ),
+        SizedBox(width: isLargeScreen ? 16 : 8),
       ],
     );
   }
@@ -75,9 +73,14 @@ class _NavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: TextButton(
         onPressed: onTap,
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          minimumSize: Size.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        ),
         child: Text(
           title,
           style: const TextStyle(

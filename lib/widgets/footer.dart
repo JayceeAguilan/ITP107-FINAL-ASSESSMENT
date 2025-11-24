@@ -47,22 +47,47 @@ class Footer extends StatelessWidget {
                 const Divider(color: Colors.white24),
                 const SizedBox(height: 24),
                 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '© 2025 UrbanKicks. All rights reserved.',
-                      style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 12),
-                    ),
-                    Row(
-                      children: [
-                        _SocialIcon(icon: Icons.facebook),
-                        _SocialIcon(icon: Icons.camera_alt), // Instagram
-                        _SocialIcon(icon: Icons.alternate_email), // Twitter/X
-                      ],
-                    ),
-                  ],
-                ),
+                if (MediaQuery.of(context).size.width > 400)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          '© 2025 UrbanKicks. All rights reserved.',
+                          style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 12),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _SocialIcon(icon: Icons.facebook),
+                          _SocialIcon(icon: Icons.camera_alt), // Instagram
+                          _SocialIcon(icon: Icons.alternate_email), // Twitter/X
+                        ],
+                      ),
+                    ],
+                  )
+                else
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _SocialIcon(icon: Icons.facebook),
+                          _SocialIcon(icon: Icons.camera_alt), // Instagram
+                          _SocialIcon(icon: Icons.alternate_email), // Twitter/X
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        '© 2025 UrbanKicks. All rights reserved.',
+                        style: TextStyle(color: Colors.white.withValues(alpha: 0.6), fontSize: 12),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),

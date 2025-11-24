@@ -125,23 +125,27 @@ class _ProductCardState extends State<ProductCard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          '\u20B1${widget.product.price.toStringAsFixed(2)}',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: AppTheme.primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                        Expanded(
+                          child: Text(
+                            '₱${widget.product.price.toStringAsFixed(2)}',
+                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: AppTheme.primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        const SizedBox(width: 8),
                         Container(
                           decoration: BoxDecoration(
                             color: AppTheme.primaryColor,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: IconButton(
-                            icon: const Icon(Icons.add_shopping_cart, color: Colors.white, size: 20),
-                            constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
-                            padding: EdgeInsets.zero,
+                            icon: const Icon(Icons.add_shopping_cart, color: Colors.white, size: 18),
+                            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                            padding: const EdgeInsets.all(6),
                             onPressed: () {
                               // Quick add to cart (default size/color)
                               final cart = Provider.of<CartProvider>(context, listen: false);

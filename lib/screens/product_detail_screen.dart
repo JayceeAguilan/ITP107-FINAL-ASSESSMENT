@@ -9,6 +9,7 @@ import '../providers/cart_provider.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/footer.dart';
 import '../widgets/product_card.dart';
+import '../widgets/navigation_drawer.dart';
 import '../theme/app_theme.dart';
 import '../utils/constants.dart';
 import '../services/toast_service.dart';
@@ -35,6 +36,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
     return Scaffold(
       appBar: const CustomAppBar(),
+      drawer: const NavigationDrawerWidget(),
       body: SingleChildScrollView(
         child: Column(
           children: [

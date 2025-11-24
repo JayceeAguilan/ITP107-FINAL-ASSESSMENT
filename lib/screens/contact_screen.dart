@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/footer.dart';
+import '../widgets/navigation_drawer.dart';
 import '../theme/app_theme.dart';
 import '../utils/constants.dart';
 
@@ -21,6 +22,7 @@ class _ContactScreenState extends State<ContactScreen> {
 
     return Scaffold(
       appBar: const CustomAppBar(),
+      drawer: const NavigationDrawerWidget(),
       body: SingleChildScrollView(
         child: Column(
           children: [

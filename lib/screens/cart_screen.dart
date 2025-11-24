@@ -6,6 +6,7 @@ import '../widgets/custom_app_bar.dart';
 import '../widgets/footer.dart';
 import '../widgets/cart_item_widget.dart';
 import '../widgets/empty_state_widget.dart';
+import '../widgets/navigation_drawer.dart';
 import '../theme/app_theme.dart';
 import '../utils/constants.dart';
 
@@ -18,6 +19,7 @@ class CartScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: const CustomAppBar(),
+      drawer: const NavigationDrawerWidget(),
       body: Consumer<CartProvider>(
         builder: (context, cart, child) {
           if (cart.itemCount == 0) {
